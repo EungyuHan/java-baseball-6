@@ -28,6 +28,22 @@ public class Application {
         }
         return input;
     }
+
+    public static List<Integer> compareAnswer(List<Integer> answer, List<Integer> input) {
+        int strike = 0;
+        int ball = 0;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            if(answer.get(i).equals(input.get(i))) strike++;
+            for (int j = 0; j < 3; j++) {
+                if(i==j) continue;
+                if(answer.get(i).equals(input.get(j))) ball++;
+            }
+        }
+        result.add(strike);
+        result.add(ball);
+        return result;
+    }
     public static void main(String[] args) {
     }
 }
