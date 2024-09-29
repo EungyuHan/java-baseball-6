@@ -1,10 +1,11 @@
 package baseball;
 
+import static camp.nextstep.edu.missionutils.Console.readLine;
+
 import camp.nextstep.edu.missionutils.Randoms;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Application {
     static final int ANSWER_SIZE = 3;
@@ -20,9 +21,9 @@ public class Application {
         return answer;
     }
 
-    public static List<Integer> getUserInput(Scanner scanner) {
+    public static List<Integer> getUserInput() {
         List<Integer> input = new ArrayList<>();
-        String in = scanner.nextLine();
+        String in = readLine();
         // 길이가 3이 아닌경우
         if (in.length() != ANSWER_SIZE) {
             throw new IllegalArgumentException();
@@ -43,9 +44,11 @@ public class Application {
         int ball = 0;
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < ANSWER_SIZE; i++) {
+            // 스트라이크 갯수 카운트
             if (answer.get(i).equals(input.get(i))) {
                 strike++;
             }
+            // 볼 개수 카운트
             for (int j = 0; j < ANSWER_SIZE; j++) {
                 if (i == j) {
                     continue;
@@ -60,6 +63,50 @@ public class Application {
         return result;
     }
 
+    public static void startGame() {
+        List<Integer> answer = generateAnswer();
+        while (true) {
+            System.out.print("숫자를 입력해주세요 : ");
+            List<Integer> input = getUserInput();
+            List<Integer> result = compareAnswer(answer, input);
+            int strike = result.get(0);
+            int ball = result.get(1);
+            if (strike == 0 && ball == 0) {
+                System.out.println("낫싱");
+                continue;
+            }
+            String indicator = "";
+            if (ball != 0) {
+                indicator += ball + "볼";
+            }
+            if (strike != 0) {
+                if (!indicator.isEmpty()) {
+                    indicator += " ";
+                }
+                indicator += strike + "스트라이크";
+            }
+            System.out.println(indicator);
+            if (strike == 3) {
+                System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+                break;
+            }
+        }
+    }
+
     public static void main(String[] args) {
+        System.out.println("숫자 야구 게임을 시작합니다.");
+        while (true) {
+            startGame();
+            while (true) {
+                System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+                int flag = Integer.parseInt(readLine());
+                // 1이나 2가 아닌 수가 입력된 경우
+                if (flag == 1) { // 1이 입력된 경우, 루프를 종료하고 재시작
+                    break;
+                } else if (flag == 2) { // 2가 입력된 경우, 프로그램 종료
+                    return;
+                }
+            }
+        }
     }
 }
